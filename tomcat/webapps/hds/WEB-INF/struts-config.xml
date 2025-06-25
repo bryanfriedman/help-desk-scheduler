@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.0//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_0.dtd">
+
+<!--
+     This is a blank Struts configuration file based on the example application,
+     with commented examples of some items.
+
+     NOTE: If you have a generator tool to create the corresponding Java classes 
+     for you, you could include the details in the "form-bean" declarations.  
+     Otherwise, you would only define the "form-bean" element itself, with the 
+     corresponding "name" and "type" attributes, as shown here.
+-->
+ 
+<struts-config>
+
+
+  <!-- ========== Data Source Configuration =============================== -->
+
+   <data-sources>
+      <!-- configuration for GenericDataSource wrapper -->
+      <data-source>
+        <set-property
+          property="autoCommit"
+          value="true"/>
+        <set-property
+          property="description"
+          value="Help Desk Database"/>
+        <set-property
+          property="driverClass"
+          value="com.mysql.cj.jdbc.Driver"/>
+        <set-property
+          property="maxCount"
+          value="4"/>
+        <set-property
+          property="minCount"
+          value="2"/>
+        <set-property
+          property="password"
+          value="helpdesk"/>
+        <set-property
+          property="url"
+          value="jdbc:mysql://db:3306/hds?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=US/Pacific"/>
+        <set-property
+          property="user"
+          value="helpdesk"/>
+      </data-source>
+   </data-sources>
+
+
+  <!-- ========== Form Bean Definitions =================================== -->
+  <form-beans>
+
+    <!-- Example logon form bean 
+    <form-bean      name="logonForm"
+                    type="org.apache.struts.example.LogonForm"/>
+     -->
+
+    <form-bean      name="accountsForm"
+                    type="hds.accounts.AccountsForm"/>
+
+    <form-bean      name="prioritiesForm"
+                    type="hds.accounts.PrioritiesForm"/>
+
+    <form-bean      name="scheduleForm"
+                    type="hds.ScheduleForm"/>
+
+    <form-bean      name="rulesForm"
+                    type="hds.RulesForm"/>
+
+    <form-bean      name="prefsForm"
+                    type="hds.PrefsForm"/>
+
+    <form-bean      name="availForm"
+                    type="hds.AvailForm"/>
+
+    <form-bean      name="classForm"
+                    type="hds.ClassForm"/>
+
+    <form-bean      name="prefHoursForm"
+                    type="hds.PrefHoursForm"/>
+
+    <form-bean      name="scheduleViewForm"
+                    type="hds.view.ScheduleViewForm"/>
+
+    <form-bean      name="viewScheduleForm"
+                    type="hds.view.ViewScheduleForm"/>
+
+
+  </form-beans>
+
+
+  <!-- ========== Global Forward Definitions ============================== -->
+  <global-forwards>
+
+    
+     <forward   name="index"                path="/index.jsp"/>
+     <forward   name="privileges"           path="/privileges.jsp"/>
+
+
+  </global-forwards>
+
+
+  <!-- ========== Action Mapping Definitions ============================== -->
+  <action-mappings>
+
+   <action    path="/mainAccounts"
+               type="hds.accounts.MainAccountsAction"
+               name="accountsForm"
+              scope="request"
+           validate="false">
+      <forward name="success" path="/accounts/mainAccounts.jsp"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/editAccount"
+               type="hds.accounts.EditAccountAction"
+               name="accountsForm"
+           validate="false"
+              scope="request">
+      <forward name="success" path="/accounts/editAccount.jsp"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+    <action    path="/makeAccount"
+               type="hds.accounts.MakeAccountAction"
+               name="accountsForm"
+              input="/accounts/editAccount.jsp"
+              scope="request">
+      <forward name="success" path="/mainAccounts.do"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+    
+    <action    path="/deleteAccount"
+               type="hds.accounts.DeleteAccountAction"
+               name="accountsForm"
+              scope="request"
+           validate="false">
+      <forward name="success" path="/mainAccounts.do"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/priorities"
+               type="hds.accounts.PrioritiesAction"
+               name="prioritiesForm"
+           validate="false"
+              scope="request">
+      <forward name="success" path="/accounts/priorities.jsp"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/changePriority"
+               type="hds.accounts.ChangePriorityAction"
+               name="prioritiesForm"
+              input="/priorities.do"
+              scope="request"
+              validate="true">
+      <forward name="success" path="/priorities.do"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/newSchedule"
+               type="hds.ScheduleAction"
+               name="scheduleForm"
+              scope="request"
+              validate="false">
+      <forward name="success" path="/admin/schedule.jsp"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/makeSchedule"
+               type="hds.MakeScheduleAction"
+               name="scheduleForm"
+              input="/admin/schedule.jsp"
+              scope="request"
+              validate="true">
+      <forward name="success" path="/rules.do"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/rules"
+               type="hds.RulesAction"
+               name="rulesForm"
+              scope="request"
+              validate="false">
+      <forward name="success" path="/admin/rules.jsp"/>
+      <forward name="noRules" path="/index.jsp"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/setRules"
+               type="hds.SetRulesAction"
+               name="rulesForm"
+              input="/admin/rules.jsp"
+              scope="request"
+              validate="true">
+      <forward name="success" path="/index.jsp"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+
+
+
+   <action    path="/enterPrefs"
+               type="hds.EnterPrefsAction"
+               name="prefsForm"
+              scope="request"
+              validate="false">
+      <forward name="success" path="/student/schedPrefs.jsp"/>
+      <forward name="noScheds" path="/student/noScheds.jsp"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/setPrefs"
+               type="hds.SetPrefsAction"
+               name="prefsForm"
+              scope="request"
+              input="/enterPrefs.do"
+              validate="true">
+      <forward name="avail" path="/enterAvail.do"/>
+      <forward name="class" path="/enterClass.do"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/enterAvail"
+               type="hds.EnterAvailAction"
+               name="availForm"
+              scope="request"
+              validate="false">
+      <forward name="success" path="/student/avail.jsp"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/setAvail"
+               type="hds.SetAvailAction"
+               name="availForm"
+              scope="request"
+              validate="false">   <!-- Does not need validation -->
+      <forward name="success" path="/student/hours.jsp"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+
+   <action    path="/enterClass"
+               type="hds.EnterClassAction"
+               name="classForm"
+              scope="request"
+              validate="false">
+      <forward name="success" path="/student/class.jsp"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/setClass"
+               type="hds.SetClassAction"
+               name="classForm"
+              scope="request"
+              input="/enterClass.do"
+              validate="true">
+      <forward name="success" path="/student/hours.jsp"/>
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/setPrefHours"
+               type="hds.SetPrefHoursAction"
+               name="prefHoursForm"
+              scope="request"
+              input="/student/hours.jsp"
+              validate="true">
+      <forward name="success" path="/index.jsp"/> 
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+
+
+   <action    path="/viewSchedule"
+               type="hds.view.ViewScheduleAction"
+               name="viewScheduleForm"
+              scope="session"
+              validate="false">
+      <forward name="success" path="/view/selectView.jsp"/> 
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/gotoView"
+               type="hds.view.GotoViewAction"
+               name="viewScheduleForm"
+              scope="session"
+              input="/viewSchedule.do"
+              validate="true">
+      <forward name="detail" path="/detailView.do"/> 
+      <forward name="tabular" path="/weeklyView.do"/> 
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/detailView"
+               type="hds.view.WeeklyViewAction"
+               name="viewScheduleForm"
+              scope="session"
+              validate="false">
+      <forward name="success" path="/view/detailView.jsp"/> 
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+   <action    path="/weeklyView"
+               type="hds.view.WeeklyViewAction"
+               name="viewScheduleForm"
+              scope="session"
+              validate="false">
+      <forward name="success" path="/view/weeklyView.jsp"/> 
+      <forward name="failure" path="/problem.jsp"/>
+    </action>
+
+
+
+
+
+    <!-- Example logon action 
+    <action    path="/logon"
+               type="org.apache.struts.example.LogonAction"
+               name="logonForm"
+              scope="request"
+              input="/logon.jsp">
+    </action>
+    -->
+
+    <!-- Example logoff action 
+    <action    path="/logoff"
+               type="org.apache.struts.example.LogoffAction">
+      <forward name="success"              path="/index.jsp"/>
+    </action>
+    -->
+
+
+    <!-- The standard administrative actions available with Struts -->
+    <!-- These would be either omitted or protected by security -->
+    <!-- in a real application deployment 
+    <action    path="/admin/addFormBean"
+               type="org.apache.struts.actions.AddFormBeanAction"/>
+    <action    path="/admin/addForward"
+               type="org.apache.struts.actions.AddForwardAction"/>
+    <action    path="/admin/addMapping"
+               type="org.apache.struts.actions.AddMappingAction"/>
+    <action    path="/admin/reload"
+               type="org.apache.struts.actions.ReloadAction"/>
+    <action    path="/admin/removeFormBean"
+               type="org.apache.struts.actions.RemoveFormBeanAction"/>
+    <action    path="/admin/removeForward"
+               type="org.apache.struts.actions.RemoveForwardAction"/>
+    <action    path="/admin/removeMapping"
+               type="org.apache.struts.actions.RemoveMappingAction"/>
+      -->
+
+  </action-mappings>
+
+</struts-config>

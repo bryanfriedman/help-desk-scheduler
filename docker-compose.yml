@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mysql/mysql-server:8.0.13
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: hds
+      MYSQL_USER: helpdesk
+      MYSQL_PASSWORD: helpdesk
+    command: --bind-address=0.0.0.0
+    #  ports:
+    #    - "3306:3306"
+    volumes:
+    - ./db:/docker-entrypoint-initdb.d
+
+  maildev:
+    image: maildev/maildev
+    ports:
+      - "1080:1080"  # Web UI
+      - "1025:1025"  # SMTP
+
+  web:    
+    depends_on:
+      - db
+    build:
+      context: .  # The build context (directory containing the Dockerfile)
+      dockerfile: Dockerfile # The name of your Dockerfile
+    # Environment variables do not appear to be getting loaded the first time Tomcat starts!
+  #    environment:
+  #      JDBC_URL: jdbc:mysql://db:3306/hds?connectTimeout=0&amp;socketTimeout=0&amp;autoReconnect=true
+  #      JDBC_USER: helpdesk
+  #      JDBC_PASS: password
+    ports:
+    - "80:8080"
+    links:
+      - db
+      - maildev

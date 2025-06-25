@@ -1,0 +1,99 @@
+<html>
+<head>
+<title>
+2.2.1. Account Administration
+</title>
+</head>
+
+<body>
+<h2>2.2.1. Account Administration</h2>
+
+<p>When the "Accounts" button is pressed on the menu, the following screen appears in the content frame:</p>
+
+<center><img src="main-account.jpg"></center>
+
+<p>This page lists all of the accounts currently in the system, as well as some details about those accounts.  The fields roughly correspond to the fields in the "Add An Account" form as detailed <a href="#1">below</a>.  Some extra fields include the account creation date and the priority level, which is discussed in detail in <a href="priorities.html">Section 2.2.2.</a> The buttons on the bottom correspond to the following three operations (described in detail below):</p>
+
+<ul>
+ <li>The "Add" button is used for <A HREF="#1">Adding an Account</A>.
+ <li>The "Delete" button is used for <A HREF="#2">Deleting an Account</A>.
+ <li>The "Modify" button is used for <A HREF="#3">Modifying an Account</A>.
+</ul>
+
+<p>There are also a couple of special things about <A HREF="#4">Modifying the Administrator Account</A>, so a separate section
+has been included for this.</p>
+
+<a name="1"></a>
+<h3>2.2.1.1. Adding an Account</h3>
+<p>When the "Add" button is clicked on the Main Accounts page, the following screen appears in the content frame:</p>
+
+<center><img src="add-account.jpg"></center>
+
+<p>The fields on the Add An Account form are as follows:</p>
+
+<ul>
+ <li>The "Account Name" field is for the name used to log in to the account.  This must be a unique name (not used by another user) and must be between 3 and 8 alphabet characters (no numbers or special characters).  The field will not let you enter more than 8, and you will get an error if you try to submit less than 3.
+ 
+ <li>The "Full Name" field is for the user's full name.  This is also an alphabet characters field only, and can be anywhere from 1 to 40 characters.  It may not be empty.
+
+ <li>The "E-Mail" field is for the user's e-mail address.  This must be a valid e-mail address and it may not be left empty.
+
+ <li>The "Account Type" field is a drop-down menu allowing you to select one of three account types: "Administrator", "Lead Student", and "Student Assistant". This is the account type.  See <a href="privileges.html">Section 2.4</a> for details on privileges for different account types.
+ 
+ <li>The "Password" field is for the user's password.  The only rules for this field is that the password must be at least 6 characters.  If you would prefer to have a password randomly generated, you may click the "Random" button to the right of the "Password" field to have it populated with a random password.  Upon submission of the form, this password (along with other account details) will be e-mailed to the user's e-mail address as specified by the "E-Mail" field.
+
+ <li>Finally, the "Work Start Date" field is for the date when this user first began working.  This must be a valid date.  The "..." button may be pressed to select a date from the calendar pop-up to populate the field.
+</ul>
+
+<p>The "Add" button is used to submit the form and add the account.  This will e-mail the new user with the account information and will return to the Main Accounts Page.  The "Reset" button will clear all the fields of the form, and the "Cancel" button will return to the Main Account page.  If any of the above requirements are not met, an error will appear upon submission and the data will need to be re-entered and the form resubmitted.</p>
+
+<p>Here is an example of a properly filled out form:</p>
+
+<center><img src="add-account-done.jpg"></center>
+
+<a name="2"></a>
+<h3>2.2.1.2. Deleting an Account</h3>
+<p>When the "Delete" button is clicked on the Main Accounts page, the following screen appears in the content frame:</p>
+
+<center><img src="delete-account.jpg"></center>
+
+<p>The menu shown is a list of current account names in the database except for the main Administrator account and the user who is currently logged in (since neither of these accounts can be deleted).  One or more accounts can be chosen by clicking on the account name in this menu.  To select multiple accounts, use the CTRL or SHIFT keys.</p>
+
+<p>The "Delete" button is used to submit the form and delete the selected account(s).  The "Reset" button will clear all the fields of the form, and the "Cancel" button will return to the Main Account page.  If no account is chosen, an error will appear on submission.</p>
+
+<a name="3"></a>
+<h3>2.2.1.3. Modifying an Account</h3>
+<p>When the "Modify" button is clicked on the Main Accounts page, the following screen appears in the content frame:</p>
+
+<center><img src="modify-account.jpg"></center>
+
+<p>The form is almost identical to the Add An Account form as detailed <a href="#1">above</a>.  The differences are as follows:</p>
+
+<ul>
+ <li>There is an extra field that is a drop-down menu of all account names currently in the database.  When this is changed, the entire form is repopulated based on that selection.  The "New Account Name" field below this is where you can enter a new account name for that account.
+ <li>There is also a new field to select whether or not the account should be activated or not.  This is for when a user should not be included in schedule generation or operations (i.e. the student is on leave for a quarter or something).  More details regarding active and inactive accounts are detailed in <a href="generating.html">Section 2.2.4.</a> in the discussion of automatic schedule generation.
+ <li>The "New Account Name" and "Account Type" fields will be disabled (grayed-out) when the currently logged in user or the main Administrator account is selected.
+ <li>Finally, the "Work Start Date" field is not present since this cannot be changed.
+</ul>
+
+<p>The "Apply" button is used to submit the form and modify the account.  This will e-mail the user with the new account information and will return to the Main Accounts Page.  The "Reset" button will clear all the fields of the form, and the "Cancel" button will return to the Main Account page.  If any of the field requirements are not met, an error will appear upon submission and the data will need to be re-entered and the form resubmitted.</p>
+
+<a name="4"></a>
+<h3>2.2.1.4. Modifying the Administrator Account</h3>
+<p>When modifying the main Administrator account, the main Administrator must be logged in.  Nothing can be changed about the account except for the "Password", the "Full Name", and the "E-Mail".</p>
+
+<br>
+<br>
+<br>
+<br>
+<hr width=80% size=3>
+<center>
+<font size=-1>
+<font color=black> Prev: </font>[none]
+ | <font color=black> Next: </font><a href="priorities.html">priorities</a>
+ | <font color=black> Up: </font><a href="administrator.html">administrator</a>
+ | <font color=black> Top: </font><a href="index.html">index</a></font>
+</center>
+<hr width=80% size=3>
+</body>
+</html>

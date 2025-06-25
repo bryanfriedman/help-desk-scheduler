@@ -1,0 +1,1 @@
+There are no schedules to enter preferences for.
