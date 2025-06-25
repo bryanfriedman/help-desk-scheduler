@@ -31,7 +31,9 @@ The "Add" button is used to submit the form and add the account. This will e-mai
 
 Here is an example of a properly filled out form:
 
-![](images/add-account-done.jpg)### 2.2.1.2. Deleting an Account
+![](images/add-account-done.jpg)
+
+### 2.2.1.2. Deleting an Account
 
 When the "Delete" button is clicked on the Main Accounts page, the following screen appears in the content frame:
 
