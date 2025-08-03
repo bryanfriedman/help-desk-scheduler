@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+    providedCompile 'javax.servlet:jstl:1.2'
+    implementation 'commons-logging:commons-logging:1.2'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+war {
+    destinationDirectory = file("$buildDir/dist")
+    archiveFileName = "hds.war"
+}
