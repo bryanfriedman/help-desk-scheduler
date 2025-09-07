@@ -1,22 +1,39 @@
 plugins {
     id 'java'
     id 'war'
+    id 'org.openrewrite.rewrite' version 'latest.release'
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
 }
 
 repositories {
     mavenCentral()
 }
 
+rewrite {
+  activeRecipe 'com.bryanfriedman.rewrite.struts.UpdateStruts1'
+  exclusion "recipes/**"
+}
+
 dependencies {
-    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+    rewrite(platform("org.openrewrite.recipe:rewrite-recipe-bom:latest.release"))
+    rewrite("org.openrewrite.recipe:rewrite-migrate-java")
+    rewrite project(':recipes')
+
+    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'  
     providedCompile 'javax.servlet:jstl:1.2'
+
     implementation 'commons-logging:commons-logging:1.2'
+    implementation "jakarta.mail:jakarta.mail-api:2.0.2"
+    
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
 }
 
 war {

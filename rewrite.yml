@@ -1,0 +1,19 @@
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: com.bryanfriedman.rewrite.struts.FixStruts1Reloaded
+displayName: Fix Struts 1 to Struts 1.5 Migration Issues
+description: Replace deprecated Struts 1 classes and methods with their updated equivalents in Struts 1.5.
+recipeList:
+  - org.openrewrite.java.ChangeType:
+      oldFullyQualifiedTypeName: org.apache.struts.action.ActionError
+      newFullyQualifiedTypeName: org.apache.struts.action.ActionMessage
+---      
+type: specs.openrewrite.org/v1beta/recipe
+name: com.bryanfriedman.rewrite.struts.UpdateStruts1
+displayName: Upgrade Struts 1
+description: Upgrade Struts 1 to use Java 21, JakartaEE11, and migrate to Struts Reloaded.
+recipeList:
+  - org.openrewrite.java.migrate.UpgradeToJava21
+  - org.openrewrite.java.migrate.jakarta.JakartaEE11
+  - com.bryanfriedman.rewrite.struts.FixStruts1Reloaded
+  - com.bryanfriedman.rewrite.struts.FindDataSourceToJndi

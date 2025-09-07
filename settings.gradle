@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = 'help-desk-scheduler'
-include('app')
+include('recipes')
