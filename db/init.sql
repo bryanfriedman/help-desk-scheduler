@@ -122,6 +122,7 @@ CREATE TABLE `roles` (
   `role` enum('A','L','S') NOT NULL,
   PRIMARY KEY (`username`,`role`),
   CONSTRAINT `roles_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`)
+  ON DELETE CASCADE
 );
 
 INSERT INTO `roles` VALUES ('admin','A');
