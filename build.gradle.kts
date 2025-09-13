@@ -21,6 +21,7 @@ repositories {
 rewrite {
     activeRecipe("com.bryanfriedman.rewrite.struts.UpdateStruts1")
     exclusion("recipes/**")
+    exclusion("**/**.jsp")
 }
 
 dependencies {
