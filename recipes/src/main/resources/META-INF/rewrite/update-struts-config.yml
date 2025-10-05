@@ -9,6 +9,10 @@ recipeList:
   - org.openrewrite.xml.AddOrUpdateChildTag:
       parentXPath: "/struts-config"
       newChildTag: <message-resources parameter="ApplicationResources" null="false"/>
+  - org.openrewrite.xml.AddTagAttribute:
+      elementName: "/struts-config/action-mappings//action"
+      attributeName: cancellable
+      newValue: true
   - org.openrewrite.text.FindAndReplace:
       filePattern: "src/**/struts-config.xml"
       find: "DTD Struts Configuration 1.0"
