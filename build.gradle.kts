@@ -19,7 +19,7 @@ repositories {
 }
 
 rewrite {
-    activeRecipe("com.bryanfriedman.rewrite.struts.UpdateStruts1")
+    activeRecipe("com.bryanfriedman.rewrite.UpgradeHDS")
     exclusion("recipes/**")
 }
 

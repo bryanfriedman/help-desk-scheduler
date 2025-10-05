@@ -1,8 +1,8 @@
 ---  
 type: specs.openrewrite.org/v1beta/recipe
-name: com.bryanfriedman.rewrite.struts.UpdateStruts1
-displayName: Upgrade Struts 1
-description: Upgrade Struts 1 to use Java 21, JakartaEE11, and migrate to Struts Reloaded.
+name: com.bryanfriedman.rewrite.UpgradeHDS
+displayName: Upgrade Help Desk Scheduler
+description: Upgrade HDS application from Struts 1 to Java 21, JakartaEE11, and to Struts 1.5 Reloaded.
 recipeList:
   - org.openrewrite.java.migrate.UpgradeToJava21
   - org.openrewrite.java.migrate.jakarta.JakartaEE11  
@@ -100,3 +100,33 @@ recipeList:
       find: "<template:get" 
       replace: "<tiles:get"
       regex: true
+
+  # Update web.xml and struts-config.xml files accordingly
+  - org.openrewrite.xml.RemoveXmlTag:
+      fileMatcher: '**/struts-config.xml'
+      xPath: /struts-config/data-sources
+  - org.openrewrite.xml.AddOrUpdateChildTag:
+      parentXPath: /struts-config
+      newChildTag: <message-resources parameter="ApplicationResources" null="false"/>
+  - org.openrewrite.xml.RemoveXmlTag:
+      fileMatcher: 'src/**/web.xml'
+      xPath: /web-app//taglib
+  - org.openrewrite.xml.AddOrUpdateChildTag:
+      parentXPath: /web-app
+      newChildTag: <security-role><role-name>A</role-name></security-role>
+  - org.openrewrite.xml.AddOrUpdateChildTag:
+      parentXPath: /web-app
+      newChildTag: <security-role><role-name>L</role-name></security-role>
+  - org.openrewrite.xml.AddOrUpdateChildTag:
+      parentXPath: /web-app
+      newChildTag: <security-role><role-name>S</role-name></security-role>
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "src/**/struts-config.xml"
+      find: "DTD Struts Configuration 1.0" 
+      replace: "DTD Struts Configuration 1.3"
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "src/**/struts-config.xml"
+      find: "http://jakarta.apache.org/struts/dtds/struts-config_1_0" 
+      replace: "https://struts.apache.org/dtds/struts-config_1_3"
+
+
