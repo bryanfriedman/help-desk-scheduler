@@ -1,19 +1,102 @@
----
-type: specs.openrewrite.org/v1beta/recipe
-name: com.bryanfriedman.rewrite.struts.FixStruts1Reloaded
-displayName: Fix Struts 1 to Struts 1.5 Migration Issues
-description: Replace deprecated Struts 1 classes and methods with their updated equivalents in Struts 1.5.
-recipeList:
-  - org.openrewrite.java.ChangeType:
-      oldFullyQualifiedTypeName: org.apache.struts.action.ActionError
-      newFullyQualifiedTypeName: org.apache.struts.action.ActionMessage
----      
+---  
 type: specs.openrewrite.org/v1beta/recipe
 name: com.bryanfriedman.rewrite.struts.UpdateStruts1
 displayName: Upgrade Struts 1
 description: Upgrade Struts 1 to use Java 21, JakartaEE11, and migrate to Struts Reloaded.
 recipeList:
   - org.openrewrite.java.migrate.UpgradeToJava21
-  - org.openrewrite.java.migrate.jakarta.JakartaEE11
-  - com.bryanfriedman.rewrite.struts.FixStruts1Reloaded
+  - org.openrewrite.java.migrate.jakarta.JakartaEE11  
+  - org.openrewrite.java.dependencies.ChangeDependency:
+      oldGroupId: com.sun.mail
+      oldArtifactId: javax.mail
+      newGroupId: org.eclipse.angus
+      newArtifactId: jakarta.mail
+      newVersion: 2.0.3
+  - org.openrewrite.java.dependencies.ChangeDependency:
+      oldGroupId: javax.servlet
+      oldArtifactId: servlet-api
+      newGroupId: jakarta.servlet
+      newArtifactId: jakarta.servlet-api
+      newVersion: 5.0.0
+  - org.openrewrite.java.dependencies.ChangeDependency:
+      oldGroupId: javax.servlet
+      oldArtifactId: jstl
+      newGroupId: org.glassfish.web
+      newArtifactId: jakarta.servlet.jsp.jstl
+      newVersion: 3.0.1
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: io.github.weblegacy
+      artifactId: struts-core
+      newVersion: 1.5.0-RC2
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: io.github.weblegacy
+      artifactId: struts-taglib
+      version: 1.5.0-RC2
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: io.github.weblegacy
+      artifactId: struts-tiles
+      version: 1.5.0-RC2  
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: org.eclipse.angus
+      artifactId: angus-activation
+      version: 2.0.2
+
+  # Required changes from Struts 1.1 to Struts 1.5 (Reloaded)
+  - org.openrewrite.java.ChangeType:
+      oldFullyQualifiedTypeName: org.apache.struts.action.ActionError
+      newFullyQualifiedTypeName: org.apache.struts.action.ActionMessage
+  - org.openrewrite.java.ChangeMethodName:
+      methodPattern: org.apache.struts.action.ActionMessages empty()
+      newMethodName: isEmpty
+  - org.openrewrite.java.ChangeMethodName:
+      methodPattern: org.apache.struts.action.Action perform(..)
+      newMethodName: execute
+  - com.bryanfriedman.rewrite.AddThrowsException:
+      methodPattern: org.apache.struts.action.Action execute(..)
+      exceptionType: java.lang.Exception
+
+  # Newer Tomcat versions require JNDI reference for data sources
   - com.bryanfriedman.rewrite.struts.FindDataSourceToJndi
+  
+  # Remove old Struts dependency reference
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/build.gradle.kts"
+      find: "implementation\\(files\\([\"']libs/struts\\.jar[\"']\\)\\)"
+      replace: ""
+      regex: true
+
+  # Get rid of old tag libraries
+  - org.openrewrite.DeleteSourceFiles:
+      filePattern: src/main/webapp/WEB-INF/*.tld
+
+  # Use `tiles` instead of `template` for new Struts
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/*.jsp"
+      find: "(.*)/WEB-INF/struts-(.*)\\.tld" 
+      replace: "$1http://struts.apache.org/tags-$2"
+      regex: true
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/*.jsp"
+      find: "prefix=[\"']template[\"']" 
+      replace: "prefix='tiles'"
+      regex: true
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/*.jsp"
+      find: "<template:insert(.*) template=(.*)>" 
+      replace: "<tiles:insert$1 page=$2>"
+      regex: true
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/*.jsp"
+      find: "<template:put(.*) content=(.*)>" 
+      replace: "<tiles:put$1 value=$2>"
+      regex: true
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/*.jsp"
+      find: "</template" 
+      replace: "</tiles"
+      regex: true
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/*.jsp"
+      find: "<template:get" 
+      replace: "<tiles:get"
+      regex: true
