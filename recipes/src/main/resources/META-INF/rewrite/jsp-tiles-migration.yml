@@ -9,6 +9,11 @@ recipeList:
       regex: true
   - org.openrewrite.text.FindAndReplace:
       filePattern: "**/*.jsp"
+      find: "(.*)http://struts.apache.org/tags-template"
+      replace: "$1http://struts.apache.org/tags-tiles"
+      regex: true
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/*.jsp"
       find: "prefix=[\"']template[\"']"
       replace: "prefix='tiles'"
       regex: true
