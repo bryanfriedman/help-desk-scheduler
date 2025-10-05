@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server port="8005" shutdown="SHUTDOWN">
+
+  <!-- Basic JVM & threading diagnostics -->
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener"/>
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on"/>
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/>
+
+  <!-- JNDI resources available to the entire server -->
+  <GlobalNamingResources>
+
+    <!-- Your MySQL pool. Adjust URL/creds to match docker-compose/env. -->
+    <Resource
+        name="jdbc/hds"
+        auth="Container"
+        type="javax.sql.DataSource"
+        factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+        driverClassName="com.mysql.cj.jdbc.Driver"
+        url="jdbc:mysql://db:3306/hds?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=US/Pacific"
+        username="helpdesk"
+        password="helpdesk"
+        testOnBorrow="true"
+        validationQuery="SELECT 1"
+        maxTotal="20"
+        maxIdle="10"
+        maxWaitMillis="10000"/>
+  </GlobalNamingResources>
+
+  <Service name="Catalina">
+
+    <!-- HTTP connector on 8080 -->
+    <Connector
+        port="8080"
+        protocol="org.apache.coyote.http11.Http11NioProtocol"
+        connectionTimeout="20000"
+        redirectPort="8443"
+        URIEncoding="UTF-8"
+        maxHttpHeaderSize="32768"
+        compression="on"
+        compressibleMimeType="text/html,text/xml,text/plain,text/css,application/json,application/javascript,application/xml,text/javascript"/>
+
+    <Engine name="Catalina" defaultHost="localhost">
+
+<Realm className="org.apache.catalina.realm.LockOutRealm">
+  <Realm className="org.apache.catalina.realm.DataSourceRealm"
+         dataSourceName="jdbc/hds"
+         userTable="users"
+         userNameCol="username"
+         userCredCol="passwd"
+         userRoleTable="roles"
+         roleNameCol="role">
+         <CredentialHandler
+          className="org.apache.catalina.realm.MessageDigestCredentialHandler"
+          algorithm="MD5" />
+     </Realm>
+</Realm>
+
+      <Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+
+        <!-- Access log (common format) -->
+        <Valve className="org.apache.catalina.valves.AccessLogValve"
+               directory="logs"
+               prefix="localhost_access_log"
+               suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b"/>
+
+      </Host>
+    </Engine>
+  </Service>
+</Server>
