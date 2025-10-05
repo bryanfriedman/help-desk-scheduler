@@ -36,6 +36,6 @@ dependencies {
 }
 
 tasks.named<War>("war") {
-    destinationDirectory.set(file("$buildDir/dist"))
+    destinationDirectory = layout.buildDirectory.dir("dist")
     archiveFileName.set("hds.war")
 }
