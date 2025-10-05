@@ -3,7 +3,8 @@ name: com.bryanfriedman.hds.TomcatConfig
 displayName: Create server.xml and context.xml for Tomcat 11
 recipeList:
   - org.openrewrite.text.CreateTextFile:
-      relativeFileName: DockerfileoverwriteExisting: true
+      relativeFileName: Dockerfile
+      overwriteExisting: true
       fileContents: >
         FROM tomcat:11-jdk21-temurin
 
