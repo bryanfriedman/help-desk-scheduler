@@ -1,0 +1,47 @@
+type: specs.openrewrite.org/v1beta/recipe
+name: com.bryanfriedman.hds.HandleDependencies
+displayName: Modernize dependencies (Angus Mail, Jakarta Servlet/JSTL, WebLegacy Struts)
+recipeList:
+  - org.openrewrite.java.dependencies.ChangeDependency:
+      oldGroupId: com.sun.mail
+      oldArtifactId: javax.mail
+      newGroupId: org.eclipse.angus
+      newArtifactId: jakarta.mail
+      newVersion: 2.0.3
+  - org.openrewrite.java.dependencies.ChangeDependency:
+      oldGroupId: javax.servlet
+      oldArtifactId: servlet-api
+      newGroupId: jakarta.servlet
+      newArtifactId: jakarta.servlet-api
+      newVersion: 5.0.0
+  - org.openrewrite.java.dependencies.ChangeDependency:
+      oldGroupId: javax.servlet
+      oldArtifactId: jstl
+      newGroupId: org.glassfish.web
+      newArtifactId: jakarta.servlet.jsp.jstl
+      newVersion: 3.0.1
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: io.github.weblegacy
+      artifactId: struts-core
+      version: 1.5.0-RC2
+      configuration: implementation
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: io.github.weblegacy
+      artifactId: struts-taglib
+      version: 1.5.0-RC2
+      configuration: implementation
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: io.github.weblegacy
+      artifactId: struts-tiles
+      version: 1.5.0-RC2
+      configuration: implementation
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: org.eclipse.angus
+      artifactId: angus-activation
+      version: 2.0.2
+      configuration: implementation
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/build.gradle.kts"
+      find: "implementation\\(files\\([\"']libs/struts\\.jar[\"']\\)\\)"
+      replace: ""
+      regex: true

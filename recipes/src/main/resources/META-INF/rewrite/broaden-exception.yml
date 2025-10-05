@@ -1,0 +1,8 @@
+type: specs.openrewrite.org/v1beta/recipe
+name: com.bryanfriedman.hds.BroadenException
+displayName: Broaden SQLException to Exception
+description: Catch Exception instead of only SQLException
+recipeList:
+  - org.openrewrite.java.ChangeType:
+      oldFullyQualifiedTypeName: java.sql.SQLException
+      newFullyQualifiedTypeName: java.lang.Exception

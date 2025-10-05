@@ -1,0 +1,34 @@
+type: specs.openrewrite.org/v1beta/recipe
+name: com.bryanfriedman.hds.JspTilesMigration
+displayName: JSP migration from Struts Template tags to Tiles tags
+recipeList:
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/*.jsp"
+      find: "(.*)/WEB-INF/struts-(.*)\\.tld"
+      replace: "$1http://struts.apache.org/tags-$2"
+      regex: true
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/*.jsp"
+      find: "prefix=[\"']template[\"']"
+      replace: "prefix='tiles'"
+      regex: true
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/*.jsp"
+      find: "<template:insert(.*) template=(.*)>"
+      replace: "<tiles:insert$1 page=$2>"
+      regex: true
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/*.jsp"
+      find: "<template:put(.*) content=(.*)>"
+      replace: "<tiles:put$1 value=$2>"
+      regex: true
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/*.jsp"
+      find: "</template"
+      replace: "</tiles"
+      regex: true
+  - org.openrewrite.text.FindAndReplace:
+      filePattern: "**/*.jsp"
+      find: "<template:get"
+      replace: "<tiles:get"
+      regex: true

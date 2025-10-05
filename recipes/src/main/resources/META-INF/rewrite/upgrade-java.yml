@@ -1,0 +1,7 @@
+type: specs.openrewrite.org/v1beta/recipe
+name: com.bryanfriedman.hds.UpgradeJava
+displayName: Base platform upgrades (Java 21 + Jakarta EE 11)
+description: Upgrade JDK and Jakarta namespaces.
+recipeList:
+  - org.openrewrite.java.migrate.UpgradeToJava21
+  - org.openrewrite.java.migrate.jakarta.JakartaEE11
