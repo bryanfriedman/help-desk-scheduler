@@ -21,7 +21,6 @@ repositories {
 rewrite {
     activeRecipe("com.bryanfriedman.rewrite.struts.UpdateStruts1")
     exclusion("recipes/**")
-    exclusion("**/**.jsp")
 }
 
 dependencies {
@@ -30,15 +29,10 @@ dependencies {
     rewrite("org.openrewrite.recipe:rewrite-migrate-java")
     rewrite(project(":recipes"))
 
-    implementation("javax.servlet:servlet-api:2.4")
-    implementation("javax.servlet:jstl:1.2")
-    compileOnly("com.sun.mail:javax.mail:1.6.2")
-    compileOnly("struts:struts:1.1") {
-        isTransitive = false
-    }
-
-    // To use local jars in libs/
-    //implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation("javax.servlet:servlet-api:2.3")
+    implementation("javax.servlet:jstl:1.0")
+    implementation("com.sun.mail:javax.mail:1.6.2")
+    implementation(files("libs/struts.jar"))
 }
 
 tasks.named<War>("war") {
