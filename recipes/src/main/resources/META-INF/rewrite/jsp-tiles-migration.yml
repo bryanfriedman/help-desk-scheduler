@@ -29,10 +29,11 @@ recipeList:
       regex: true
   - org.openrewrite.text.FindAndReplace:
       filePattern: "**/*.jsp"
-      find: "</template"
-      replace: "</tiles"
+      find: "<template:get(.*) name=(.*)>"
+      replace: "<tiles:insert$1 ignore=\"true\" attribute=$2>"
       regex: true
   - org.openrewrite.text.FindAndReplace:
       filePattern: "**/*.jsp"
-      find: "<template:get "
-      replace: "<tiles:insert ignore=\"true\" "
+      find: "</template"
+      replace: "</tiles"
+      regex: true
