@@ -21,6 +21,7 @@ repositories {
 rewrite {
     activeRecipe("com.bryanfriedman.rewrite.UpgradeHDS")
     exclusion("recipes/**")
+    exclusion("archive/**")
 }
 
 dependencies {
