@@ -78,6 +78,6 @@ This is hardly code modernization. It's still using an antiquated framework in S
 
 ### Running the OpenRewrite Recipes
 
-I've run the recipes and checked in the changes to the [`upgrade-recipe`](/tree/upgrade-recipe) branch. To run the recipes yourself and see the changes, use the OpenRewrite Gradle plugin:
+I've run the recipes and checked in the changes to the `upgrade-recipe` branch. To run the recipes yourself and see the changes, use the OpenRewrite Gradle plugin:
 
 `./gradlew rewriteRun`
