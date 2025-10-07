@@ -43,7 +43,7 @@ And to shut everything down and clean it up:
 
 Now that I have a baseline of mostly working code, maybe I can write some OpenRewrite recipes to modernize it somehow. Some ideas:
 
-- Switch from MySQL to PostgreSQL
+- [ ] Switch from MySQL to PostgreSQL
 - [x] Upgrade to Java 21
 - [x] Upgrade to use a newer version of Tomcat
 - [x] Migrate from Struts 1.0 to 1.5
