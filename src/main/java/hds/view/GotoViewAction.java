@@ -2,19 +2,22 @@ package hds.view;
 
 import java.sql.*;
 import java.util.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.text.*;
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import org.apache.struts.action.*;
 import hds.HDSDate;
 
 public final class GotoViewAction extends Action {
 
-  public ActionForward perform(ActionMapping mapping,
+  public ActionForward execute(ActionMapping mapping,
       ActionForm form,
       HttpServletRequest request,
-      HttpServletResponse response) {
+      HttpServletResponse response) throws Exception {
 
-   javax.sql.DataSource dataSource;
+   DataSource dataSource;
    java.sql.Connection myConnection = null;   
    HttpSession session = request.getSession();
    ViewScheduleForm f = (ViewScheduleForm) form;
@@ -29,7 +32,7 @@ public final class GotoViewAction extends Action {
 
    ActionErrors errors = new ActionErrors();
 	// Report any errors we have discovered back to the original form
-	if (!errors.empty()) {
+	if (!errors.isEmpty()) {
       saveErrors(request, errors);
       saveToken(request);
 	   return (new ActionForward(mapping.getInput()));
@@ -59,7 +62,7 @@ public final class GotoViewAction extends Action {
    }
 
    try {
-      dataSource = servlet.findDataSource(null);
+      dataSource = (DataSource) ((Context) new InitialContext().lookup("java:comp/env")).lookup("jdbc/hds");
       myConnection = dataSource.getConnection();
       Statement stmt = myConnection.createStatement();
       String sql = "SELECT schedule_name ";
@@ -70,7 +73,7 @@ public final class GotoViewAction extends Action {
       rs.next();
       f.setScheduleName(rs.getString("schedule_name"));
 
-   } catch (SQLException sqle) {
+   } catch (Exception sqle) {
       request.setAttribute("exception", sqle.getMessage());
       return (mapping.findForward("failure"));
    } finally {
@@ -78,7 +81,7 @@ public final class GotoViewAction extends Action {
       //sure the connection is closed
       try {
          myConnection.close();
-      } catch (SQLException e) {
+      } catch (Exception e) {
          request.setAttribute("exception", e.getMessage());
          return (mapping.findForward("failure"));
       }
@@ -89,7 +92,7 @@ public final class GotoViewAction extends Action {
       page = "tabular";
    } else if ("individual".equals(f.getType())) {
       try {
-         dataSource = servlet.findDataSource(null);
+         dataSource = (DataSource) ((Context) new InitialContext().lookup("java:comp/env")).lookup("jdbc/hds");
          myConnection = dataSource.getConnection();
          Statement stmt = myConnection.createStatement();
          String sql = "SELECT fullname ";
@@ -100,7 +103,7 @@ public final class GotoViewAction extends Action {
          rs.next();
          f.setFullname(rs.getString("fullname"));
    
-      } catch (SQLException sqle) {
+      } catch (Exception sqle) {
          request.setAttribute("exception", sqle.getMessage());
          return (mapping.findForward("failure"));
       } finally {
@@ -108,7 +111,7 @@ public final class GotoViewAction extends Action {
          //sure the connection is closed
          try {
             myConnection.close();
-         } catch (SQLException e) {
+         } catch (Exception e) {
             request.setAttribute("exception", e.getMessage());
             return (mapping.findForward("failure"));
          }

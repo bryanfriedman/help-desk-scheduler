@@ -7,10 +7,10 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
@@ -30,10 +30,14 @@ dependencies {
     rewrite("org.openrewrite.recipe:rewrite-migrate-java")
     rewrite(project(":recipes"))
 
-    implementation("javax.servlet:servlet-api:2.3")
-    implementation("javax.servlet:jstl:1.0")
-    implementation("com.sun.mail:javax.mail:1.6.2")
-    implementation(files("libs/struts.jar"))
+    implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
+    implementation("org.eclipse.angus:angus-activation:2.0.2")
+    implementation("org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1")
+    implementation("org.eclipse.angus:angus-mail:2.0.3")
+    
+    implementation("io.github.weblegacy:struts-core:1.5.0-RC2")
+    implementation("io.github.weblegacy:struts-taglib:1.5.0-RC2")
+    implementation("io.github.weblegacy:struts-tiles:1.5.0-RC2")
 }
 
 tasks.named<War>("war") {

@@ -1,6 +1,6 @@
 package hds;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import java.lang.*;
 import org.apache.struts.action.*;
 
@@ -48,34 +48,34 @@ public final class PrefsForm extends ActionForm {
    int max = 0;
    if ((minHours == null) || (minHours.length() < 1)) {
          errors.add("minHours",
-                  new ActionError("error.min.required"));
+                  new ActionMessage("error.min.required"));
    } else {
       try {
          min = Integer.parseInt(minHours);
       } catch (NumberFormatException e) {
-         errors.add("minHours", new ActionError("error.min.number", minHours));
+         errors.add("minHours", new ActionMessage("error.min.number", minHours));
       }
       if (min < 1) {
-         errors.add("minHours", new ActionError("error.min.greater"));
+         errors.add("minHours", new ActionMessage("error.min.greater"));
       }
    }
       
    if ((maxHours == null) || (maxHours.length() < 1)) {
       errors.add("maxHours",
-               new ActionError("error.max.required"));
+               new ActionMessage("error.max.required"));
    } else {
       try {
          max = Integer.parseInt(maxHours);
       } catch (NumberFormatException e) {
-         errors.add("maxHours", new ActionError("error.max.number", maxHours));
+         errors.add("maxHours", new ActionMessage("error.max.number", maxHours));
       }
       if (max < 1) {
-         errors.add("maxHours", new ActionError("error.max.greater"));
+         errors.add("maxHours", new ActionMessage("error.max.greater"));
       }
    }
 
    if (min > max) {
-      errors.add("minHours", new ActionError("error.min.less"));
+      errors.add("minHours", new ActionMessage("error.min.less"));
    }
 
    return errors;

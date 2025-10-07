@@ -2,19 +2,22 @@ package hds.view;
 
 import java.sql.*;
 import java.util.*;
-import javax.servlet.http.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+import jakarta.servlet.http.*;
 import org.apache.struts.action.*;
 import hds.HDSDate;
 
 public final class WeeklyViewAction extends Action {
 
-  public ActionForward perform(ActionMapping mapping,
+  public ActionForward execute(ActionMapping mapping,
       ActionForm form,
       HttpServletRequest request,
-      HttpServletResponse response) {
+      HttpServletResponse response) throws Exception {
    
    HttpSession session = request.getSession();
-   javax.sql.DataSource dataSource;
+   DataSource dataSource;
    java.sql.Connection myConnection = null;
    ViewScheduleForm f = (ViewScheduleForm) form;
 
@@ -29,7 +32,7 @@ public final class WeeklyViewAction extends Action {
    HDSDate sd = null;
 
    try {
-         dataSource = servlet.findDataSource(null);
+         dataSource = (DataSource) ((Context) new InitialContext().lookup("java:comp/env")).lookup("jdbc/hds");
          myConnection = dataSource.getConnection();
          Statement stmt = myConnection.createStatement();
          String sql = "SELECT DATE_FORMAT(start_date, '%m/%d/%Y') AS start_date ";
@@ -76,7 +79,7 @@ public final class WeeklyViewAction extends Action {
             entry.setEndTime(end);
 
             s = Integer.parseInt(start.substring(0,2));
-            e = Integer.parseInt(end.substring(0,2));;
+            e = Integer.parseInt(end.substring(0,2));
             entry.setShiftLength(Integer.toString(e-s));
    
             if (s > 12)
@@ -88,7 +91,7 @@ public final class WeeklyViewAction extends Action {
             entry.setEnd(Integer.toString(e));
 
             if ("M".equals(entry.getDayOfWeek())) {
-               Vector mondays = (Vector) master.get(0);
+               Vector mondays = (Vector) master.getFirst();
                mondays.add(entry);
             } else if ("T".equals(entry.getDayOfWeek())) {
                Vector tuesdays = (Vector) master.get(1);
@@ -105,7 +108,7 @@ public final class WeeklyViewAction extends Action {
             }
 
          }
-      } catch (SQLException sqle) {
+      } catch (Exception sqle) {
          request.setAttribute("exception", sqle.getMessage());
          return (mapping.findForward("failure"));
       } finally {
@@ -113,7 +116,7 @@ public final class WeeklyViewAction extends Action {
          //sure the connection is closed
          try {
             myConnection.close();
-         } catch (SQLException e) {
+         } catch (Exception e) {
             request.setAttribute("exception", e.getMessage());
             return (mapping.findForward("failure"));
          }

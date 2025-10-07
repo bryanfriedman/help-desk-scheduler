@@ -1,6 +1,6 @@
 package hds;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import java.lang.*;
 import org.apache.struts.action.*;
 
@@ -92,7 +92,7 @@ public final class RulesForm extends ActionForm {
            "".equals(student[i])) && (!("".equals(rowi)))) {
 
          errors.add("startTime",
-                 new ActionError("error.rules.fullrow"));
+                 new ActionMessage("error.rules.fullrow"));
 
       } else if (!("".equals(rowi))) {
 
@@ -102,29 +102,29 @@ public final class RulesForm extends ActionForm {
          try {
             mn = Integer.parseInt(min[i]);
          } catch (NumberFormatException e) {
-            errors.add("min", new ActionError("error.min.number", min[i]));
+            errors.add("min", new ActionMessage("error.min.number", min[i]));
          }
          if (mn < 1) {
-            errors.add("min", new ActionError("error.min.greater"));
+            errors.add("min", new ActionMessage("error.min.greater"));
          }
 
          try {
             mx = Integer.parseInt(max[i]);
          } catch (NumberFormatException e) {
-            errors.add("max", new ActionError("error.max.number", max[i]));
+            errors.add("max", new ActionMessage("error.max.number", max[i]));
          }
          if (mx < 1) {
-            errors.add("max", new ActionError("error.max.greater"));
+            errors.add("max", new ActionMessage("error.max.greater"));
          }
 
          if (mn > mx) {
-            errors.add("min", new ActionError("error.min.less"));
+            errors.add("min", new ActionMessage("error.min.less"));
          }
 
          try {
             num = Integer.parseInt(lead[i]);
          } catch (NumberFormatException e) {
-            errors.add("lead", new ActionError("error.lead.number", lead[i]));
+            errors.add("lead", new ActionMessage("error.lead.number", lead[i]));
          }
 
          /* lead can be 0
@@ -135,17 +135,17 @@ public final class RulesForm extends ActionForm {
          try {
             num = Integer.parseInt(student[i]);
          } catch (NumberFormatException e) {
-            errors.add("student", new ActionError("error.student.number", student[i]));
+            errors.add("student", new ActionMessage("error.student.number", student[i]));
          }
          if (num < 1) {
-            errors.add("student", new ActionError("error.student.greater"));
+            errors.add("student", new ActionMessage("error.student.greater"));
          }
 
          int start = Integer.parseInt(startTime[i]);
          int end = Integer.parseInt(endTime[i]);
 
          if (start >= end) {
-            errors.add("startTime", new ActionError("error.rules.before"));
+            errors.add("startTime", new ActionMessage("error.rules.before"));
             startsLessThanEnds = false;
          }
       }
@@ -187,7 +187,7 @@ public final class RulesForm extends ActionForm {
 
    if (!noOverlaps) {
       errors.add("startTime",
-              new ActionError("error.rules.overlap"));
+              new ActionMessage("error.rules.overlap"));
    }
 
    return errors;

@@ -1,6 +1,6 @@
 package hds.accounts;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import java.lang.*;
 import org.apache.struts.action.*;
 
@@ -45,18 +45,18 @@ public final class PrioritiesForm extends ActionForm {
    ActionErrors errors = new ActionErrors();
    if ((username == null) || (username.length() < 1))
          errors.add("username",
-                 new ActionError("error.username.required"));
+                 new ActionMessage("error.username.required"));
    if ((amount == null) || (amount.length() < 1))
          errors.add("amount",
-                  new ActionError("error.amount.required"));
+                  new ActionMessage("error.amount.required"));
    int amt = 0;
    try {
       amt = Integer.parseInt(amount);
    } catch (NumberFormatException e) {
-      errors.add("amount", new ActionError("error.amount.number", amount));
+      errors.add("amount", new ActionMessage("error.amount.number", amount));
    }
    if (amt < 1) {
-      errors.add("amount", new ActionError("error.amount.greater"));
+      errors.add("amount", new ActionMessage("error.amount.greater"));
    }
 
    return errors;

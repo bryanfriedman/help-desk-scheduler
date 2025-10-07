@@ -2,25 +2,28 @@ package hds.accounts;
 
 import java.sql.*;
 import java.util.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.io.*;
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import org.apache.struts.action.*;
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
+import jakarta.activation.*;
 
 public final class DeleteAccountAction extends Action {
 
-  public ActionForward perform(ActionMapping mapping,
+  public ActionForward execute(ActionMapping mapping,
       ActionForm form,
       HttpServletRequest request,
-      HttpServletResponse response) {
+      HttpServletResponse response) throws Exception {
 
    if (!(request.isUserInRole("A"))) {
       return (mapping.findForward("privileges"));
    }
 
-   javax.sql.DataSource dataSource;
+   DataSource dataSource;
    java.sql.Connection myConnection = null;
    HttpSession session = request.getSession();
    String user = request.getParameter("username");
@@ -45,7 +48,7 @@ public final class DeleteAccountAction extends Action {
 	}
 
    try {
-      dataSource = servlet.findDataSource(null);
+      dataSource = (DataSource) ((Context) new InitialContext().lookup("java:comp/env")).lookup("jdbc/hds");
       myConnection = dataSource.getConnection();
    
       Statement stmt = myConnection.createStatement();
@@ -93,7 +96,7 @@ public final class DeleteAccountAction extends Action {
       sql = "DELETE FROM master WHERE username = '" + f.getUsername() + "'";
       stmt.executeUpdate(sql);
 
-   } catch (SQLException sqle) {
+   } catch (Exception sqle) {
       request.setAttribute("exception", sqle.getMessage());
       return (mapping.findForward("failure"));
    } finally {
@@ -101,7 +104,7 @@ public final class DeleteAccountAction extends Action {
       //sure the connection is closed
       try {
          myConnection.close();
-      } catch (SQLException e) {
+      } catch (Exception e) {
          request.setAttribute("exception", e.getMessage());
          return (mapping.findForward("failure"));
       }
@@ -135,11 +138,11 @@ public final class DeleteAccountAction extends Action {
 	Properties props = new Properties();
 	props.put("mail.smtp.host", host);
 	props.put("mail.smtp.port", port);
-	javax.mail.Session mailSession = Session.getDefaultInstance(props, null);
+	jakarta.mail.Session mailSession = Session.getDefaultInstance(props, null);
 	
 	try {
 	    // create a message
-	    javax.mail.Message msg = new MimeMessage(mailSession);
+	    jakarta.mail.Message msg = new MimeMessage(mailSession);
 	    msg.setFrom(new InternetAddress(from));
 	    InternetAddress[] address = {new InternetAddress(to), new InternetAddress(admin)};
 	    msg.setRecipients(Message.RecipientType.TO, address);

@@ -1,6 +1,6 @@
 package hds;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import java.lang.*;
 import java.util.*;
 import org.apache.struts.action.*;
@@ -67,7 +67,7 @@ public final class PrefHoursForm extends ActionForm {
              (!("".equals(rowi)))) {
 
             errors.add("startTime",
-                    new ActionError("error.rules.fullrow"));
+                    new ActionMessage("error.rules.fullrow"));
 
          } else if (!("".equals(rowi))) {
 
@@ -75,7 +75,7 @@ public final class PrefHoursForm extends ActionForm {
             int end = Integer.parseInt(endTime[i]);
 
             if (start >= end) {
-               errors.add("startTime", new ActionError("error.rules.before"));
+               errors.add("startTime", new ActionMessage("error.rules.before"));
             }
          }
       }

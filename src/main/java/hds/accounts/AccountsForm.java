@@ -1,6 +1,6 @@
 package hds.accounts;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import java.text.*;
 import org.apache.struts.action.*;
 import hds.HDSDate;
@@ -108,43 +108,43 @@ public ActionErrors validate(ActionMapping mapping,
    ActionErrors errors = new ActionErrors();
    if ((username == null) || (username.length() < 1))
       errors.add("username",
-                 new ActionError("error.username.required"));
+                 new ActionMessage("error.username.required"));
    if ((fullname == null) || (fullname.length() < 1))
       errors.add("fullname",
-                 new ActionError("error.fullname.required"));
+                 new ActionMessage("error.fullname.required"));
    if ((email == null) || (email.length() < 1))
       errors.add("email",
-                 new ActionError("error.email.required"));
+                 new ActionMessage("error.email.required"));
    else {
       int atSign = email.indexOf("@");
       if ((atSign < 1) || (atSign >= (email.length() - 1)))
          errors.add("email",
-                     new ActionError("error.email.format",
+                     new ActionMessage("error.email.format",
                                      email));
    }
 
    if (password.length() < 6 && password.length() > 0)
          errors.add("password",
-                    new ActionError("error.password.length"));
+                    new ActionMessage("error.password.length"));
 
    if ("create".equals(action)) {
       if ((password == null) || (password.length() < 1))
          errors.add("password",
-                    new ActionError("error.password.required"));
+                    new ActionMessage("error.password.required"));
 
       HDSDate start = null;
       if ((startDate == null) || (startDate.length() < 1))
          errors.add("startDate",
-                    new ActionError("error.startDate.required"));
+                    new ActionMessage("error.startDate.required"));
       else {
          start = new HDSDate(startDate);
          if (!(start.isValidDate()))
             errors.add("startDate",
-                        new ActionError("error.startDate.format",
+                        new ActionMessage("error.startDate.format",
                                         startDate));
          else if (!(start.isWeekday()))
             errors.add("startDate",
-                        new ActionError("error.startDate.weekday",
+                        new ActionMessage("error.startDate.weekday",
                                         startDate));
          
       }

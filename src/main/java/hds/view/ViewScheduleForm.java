@@ -1,7 +1,10 @@
 package hds.view;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import java.lang.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import org.apache.struts.action.*;
 import java.sql.*;
 import hds.HDSDate;
@@ -91,13 +94,13 @@ public final class ViewScheduleForm extends ActionForm {
 
       ActionErrors errors = new ActionErrors();
 
-   javax.sql.DataSource dataSource;
+   DataSource dataSource;
    java.sql.Connection myConnection = null;
    String start = null;
    String end = null;
 
    try {
-      dataSource = servlet.findDataSource(null);
+      dataSource = (DataSource) ((Context) new InitialContext().lookup("java:comp/env")).lookup("jdbc/hds");
       myConnection = dataSource.getConnection();
 
       Statement stmt = myConnection.createStatement();
@@ -112,14 +115,14 @@ public final class ViewScheduleForm extends ActionForm {
       start = rs.getString("start_date");
       end = rs.getString("end_date");
 
-   } catch (SQLException sqle) {
+   } catch (Exception sqle) {
       sqle.printStackTrace();
    } finally {
       //enclose this in a finally block to make
       //sure the connection is closed
       try {
          myConnection.close();
-      } catch (SQLException e) {
+      } catch (Exception e) {
          e.printStackTrace();
       }
    }
@@ -131,24 +134,24 @@ public final class ViewScheduleForm extends ActionForm {
    // Check weekOfDate required
    if ((weekOfDate == null) || (weekOfDate.length() < 1))
       errors.add("weekOfDate",
-                 new ActionError("error.weekOfDate.required"));
+                 new ActionMessage("error.weekOfDate.required"));
    else {
       weekOf = new HDSDate(weekOfDate);
       // Check weekOfDate format
       if (!(weekOf.isValidDate()))
          errors.add("weekOfDate",
-                     new ActionError("error.weekOfDate.format",
+                     new ActionMessage("error.weekOfDate.format",
                                      weekOfDate));
       // Check weekOfDate = monday
       else if (!(weekOf.isMonday()))
          errors.add("weekOfDate",
-                     new ActionError("error.weekOfDate.monday",
+                     new ActionMessage("error.weekOfDate.monday",
                                      weekOfDate));
 
       // Check weekOfDate between start and end
       else if (!(weekOf.isBetween(startDate, endDate)))
          errors.add("weekOfDate",
-                     new ActionError("error.weekOfDate.between",
+                     new ActionMessage("error.weekOfDate.between",
                                      weekOfDate));
    }
       return errors;

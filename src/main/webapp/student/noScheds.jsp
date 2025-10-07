@@ -1,9 +1,9 @@
-<%@ taglib uri='/WEB-INF/struts-template.tld' prefix='template' %>
+<%@ taglib uri='http://struts.apache.org/tags-tiles' prefix='tiles' %>
 
-<template:insert template='/mainTemplate.jsp'>
-  <template:put name='body' content='<body>' direct='true'/>
-  <template:put name='login' content='/userinfo.jsp'/>
-  <template:put name='menu' content='/student/menu.jsp'/>
-  <template:put name='header' content='/header.html'/>
-  <template:put name='content' content='/student/noSchedsContent.jsp'/>
-</template:insert>
+<tiles:insert page='/mainTemplate.jsp'>
+  <tiles:put name='body' value='<body>' direct='true'/>
+  <tiles:put name='login' value='/userinfo.jsp'/>
+  <tiles:put name='menu' value='/student/menu.jsp'/>
+  <tiles:put name='header' value='/header.html'/>
+  <tiles:put name='content' value='/student/noSchedsContent.jsp'/>
+</tiles:insert>

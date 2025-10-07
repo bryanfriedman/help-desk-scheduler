@@ -2,17 +2,20 @@ package hds;
 
 import java.sql.*;
 import java.util.*;
-import javax.servlet.http.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+import jakarta.servlet.http.*;
 import org.apache.struts.action.*;
 
 public final class SetPrefsAction extends Action {
 
-  public ActionForward perform(ActionMapping mapping,
+  public ActionForward execute(ActionMapping mapping,
       ActionForm form,
       HttpServletRequest request,
-      HttpServletResponse response) {
+      HttpServletResponse response) throws Exception {
   
-   javax.sql.DataSource dataSource;
+   DataSource dataSource;
    java.sql.Connection myConnection = null;
 	HttpSession session = request.getSession();
    PrefsForm f = (PrefsForm) form;
@@ -27,7 +30,7 @@ public final class SetPrefsAction extends Action {
 
    ActionErrors errors = new ActionErrors();
 	// Report any errors we have discovered back to the original form
-	if (!errors.empty()) {
+	if (!errors.isEmpty()) {
       saveErrors(request, errors);
       saveToken(request);
 	   return (new ActionForward(mapping.getInput()));
@@ -36,7 +39,7 @@ public final class SetPrefsAction extends Action {
    String username = request.getRemoteUser();
 
    try {
-      dataSource = servlet.findDataSource(null);
+      dataSource = (DataSource) ((Context) new InitialContext().lookup("java:comp/env")).lookup("jdbc/hds");
       myConnection = dataSource.getConnection();
       
       Statement stmt = myConnection.createStatement();
@@ -56,7 +59,7 @@ public final class SetPrefsAction extends Action {
 
       stmt.executeUpdate(sql);
       
-   } catch (SQLException sqle) {
+   } catch (Exception sqle) {
       request.setAttribute("exception", sqle.getMessage());
       return (mapping.findForward("failure"));
    } finally {
@@ -64,7 +67,7 @@ public final class SetPrefsAction extends Action {
       //sure the connection is closed
       try {
          myConnection.close();
-      } catch (SQLException e) {
+      } catch (Exception e) {
          request.setAttribute("exception", e.getMessage());
          return (mapping.findForward("failure"));
       }

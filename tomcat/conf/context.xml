@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?> <Context>
+  <!-- Expose the global resource under java:comp/env/jdbc/hds -->
+  <ResourceLink name="jdbc/hds" global="jdbc/hds" type="javax.sql.DataSource"/>
+</Context>

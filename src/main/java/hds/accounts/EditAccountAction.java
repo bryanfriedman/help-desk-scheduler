@@ -2,17 +2,20 @@ package hds.accounts;
 
 import java.sql.*;
 import java.util.*;
-import javax.servlet.http.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+import jakarta.servlet.http.*;
 import org.apache.struts.action.*;
 
 public final class EditAccountAction extends Action {
 
-  public ActionForward perform(ActionMapping mapping,
+  public ActionForward execute(ActionMapping mapping,
       ActionForm form,
       HttpServletRequest request,
-      HttpServletResponse response) {
+      HttpServletResponse response) throws Exception {
 
-   javax.sql.DataSource dataSource;
+   DataSource dataSource;
    java.sql.Connection myConnection = null;
    HttpSession session = request.getSession();
    String action = request.getParameter("action");
@@ -37,7 +40,7 @@ public final class EditAccountAction extends Action {
 	}
 
    try {
-      dataSource = servlet.findDataSource(null);
+      dataSource = (DataSource) ((Context) new InitialContext().lookup("java:comp/env")).lookup("jdbc/hds");
       myConnection = dataSource.getConnection();
    
       if ("modify".equals(f.getAction())) {
@@ -70,7 +73,7 @@ public final class EditAccountAction extends Action {
          f.setEmail("");
          
       }
-   } catch (SQLException sqle) {
+   } catch (Exception sqle) {
       request.setAttribute("exception", sqle.getMessage());
       return (mapping.findForward("failure"));
    } finally {
@@ -78,7 +81,7 @@ public final class EditAccountAction extends Action {
       //sure the connection is closed
       try {
          myConnection.close();
-      } catch (SQLException e) {
+      } catch (Exception e) {
          request.setAttribute("exception", e.getMessage());
          return (mapping.findForward("failure"));
       }

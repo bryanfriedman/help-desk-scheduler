@@ -2,15 +2,15 @@ package hds;
 
 import java.sql.*;
 import java.util.*;
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import org.apache.struts.action.*;
 
 public final class EnterAvailAction extends Action {
 
-  public ActionForward perform(ActionMapping mapping,
+  public ActionForward execute(ActionMapping mapping,
       ActionForm form,
       HttpServletRequest request,
-      HttpServletResponse response) {
+      HttpServletResponse response) throws Exception {
    
    HttpSession session = request.getSession();
    String[] days = {"M", "T", "W", "R", "F"};

@@ -1,6 +1,6 @@
 package hds.view;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import java.lang.*;
 import org.apache.struts.action.*;
 

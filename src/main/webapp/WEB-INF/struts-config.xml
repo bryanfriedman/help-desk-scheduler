@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 
 <!DOCTYPE struts-config PUBLIC
-          "-//Apache Software Foundation//DTD Struts Configuration 1.0//EN"
-          "http://jakarta.apache.org/struts/dtds/struts-config_1_0.dtd">
+          "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+          "https://struts.apache.org/dtds/struts-config_1_3.dtd">
 
 <!--
      This is a blank Struts configuration file based on the example application,
@@ -15,39 +15,6 @@
 -->
  
 <struts-config>
-
-
-  <!-- ========== Data Source Configuration =============================== -->
-
-   <data-sources>
-      <!-- configuration for GenericDataSource wrapper -->
-      <data-source>
-        <set-property
-          property="autoCommit"
-          value="true"/>
-        <set-property
-          property="description"
-          value="Help Desk Database"/>
-        <set-property
-          property="driverClass"
-          value="com.mysql.cj.jdbc.Driver"/>
-        <set-property
-          property="maxCount"
-          value="4"/>
-        <set-property
-          property="minCount"
-          value="2"/>
-        <set-property
-          property="password"
-          value="helpdesk"/>
-        <set-property
-          property="url"
-          value="jdbc:mysql://db:3306/hds?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=US/Pacific"/>
-        <set-property
-          property="user"
-          value="helpdesk"/>
-      </data-source>
-   </data-sources>
 
 
   <!-- ========== Form Bean Definitions =================================== -->
@@ -110,7 +77,7 @@
                type="hds.accounts.MainAccountsAction"
                name="accountsForm"
               scope="request"
-           validate="false">
+           validate="false" cancellable="true">
       <forward name="success" path="/accounts/mainAccounts.jsp"/>
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -119,7 +86,7 @@
                type="hds.accounts.EditAccountAction"
                name="accountsForm"
            validate="false"
-              scope="request">
+              scope="request" cancellable="true">
       <forward name="success" path="/accounts/editAccount.jsp"/>
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -128,7 +95,7 @@
                type="hds.accounts.MakeAccountAction"
                name="accountsForm"
               input="/accounts/editAccount.jsp"
-              scope="request">
+              scope="request" cancellable="true">
       <forward name="success" path="/mainAccounts.do"/>
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -137,7 +104,7 @@
                type="hds.accounts.DeleteAccountAction"
                name="accountsForm"
               scope="request"
-           validate="false">
+           validate="false" cancellable="true">
       <forward name="success" path="/mainAccounts.do"/>
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -146,7 +113,7 @@
                type="hds.accounts.PrioritiesAction"
                name="prioritiesForm"
            validate="false"
-              scope="request">
+              scope="request" cancellable="true">
       <forward name="success" path="/accounts/priorities.jsp"/>
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -156,7 +123,7 @@
                name="prioritiesForm"
               input="/priorities.do"
               scope="request"
-              validate="true">
+              validate="true" cancellable="true">
       <forward name="success" path="/priorities.do"/>
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -165,7 +132,7 @@
                type="hds.ScheduleAction"
                name="scheduleForm"
               scope="request"
-              validate="false">
+              validate="false" cancellable="true">
       <forward name="success" path="/admin/schedule.jsp"/>
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -175,7 +142,7 @@
                name="scheduleForm"
               input="/admin/schedule.jsp"
               scope="request"
-              validate="true">
+              validate="true" cancellable="true">
       <forward name="success" path="/rules.do"/>
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -184,7 +151,7 @@
                type="hds.RulesAction"
                name="rulesForm"
               scope="request"
-              validate="false">
+              validate="false" cancellable="true">
       <forward name="success" path="/admin/rules.jsp"/>
       <forward name="noRules" path="/index.jsp"/>
       <forward name="failure" path="/problem.jsp"/>
@@ -195,7 +162,7 @@
                name="rulesForm"
               input="/admin/rules.jsp"
               scope="request"
-              validate="true">
+              validate="true" cancellable="true">
       <forward name="success" path="/index.jsp"/>
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -207,7 +174,7 @@
                type="hds.EnterPrefsAction"
                name="prefsForm"
               scope="request"
-              validate="false">
+              validate="false" cancellable="true">
       <forward name="success" path="/student/schedPrefs.jsp"/>
       <forward name="noScheds" path="/student/noScheds.jsp"/>
       <forward name="failure" path="/problem.jsp"/>
@@ -218,7 +185,7 @@
                name="prefsForm"
               scope="request"
               input="/enterPrefs.do"
-              validate="true">
+              validate="true" cancellable="true">
       <forward name="avail" path="/enterAvail.do"/>
       <forward name="class" path="/enterClass.do"/>
       <forward name="failure" path="/problem.jsp"/>
@@ -228,7 +195,7 @@
                type="hds.EnterAvailAction"
                name="availForm"
               scope="request"
-              validate="false">
+              validate="false" cancellable="true">
       <forward name="success" path="/student/avail.jsp"/>
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -237,7 +204,7 @@
                type="hds.SetAvailAction"
                name="availForm"
               scope="request"
-              validate="false">   <!-- Does not need validation -->
+              validate="false" cancellable="true">   <!-- Does not need validation -->
       <forward name="success" path="/student/hours.jsp"/>
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -247,7 +214,7 @@
                type="hds.EnterClassAction"
                name="classForm"
               scope="request"
-              validate="false">
+              validate="false" cancellable="true">
       <forward name="success" path="/student/class.jsp"/>
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -257,7 +224,7 @@
                name="classForm"
               scope="request"
               input="/enterClass.do"
-              validate="true">
+              validate="true" cancellable="true">
       <forward name="success" path="/student/hours.jsp"/>
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -267,7 +234,7 @@
                name="prefHoursForm"
               scope="request"
               input="/student/hours.jsp"
-              validate="true">
+              validate="true" cancellable="true">
       <forward name="success" path="/index.jsp"/> 
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -278,7 +245,7 @@
                type="hds.view.ViewScheduleAction"
                name="viewScheduleForm"
               scope="session"
-              validate="false">
+              validate="false" cancellable="true">
       <forward name="success" path="/view/selectView.jsp"/> 
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -288,7 +255,7 @@
                name="viewScheduleForm"
               scope="session"
               input="/viewSchedule.do"
-              validate="true">
+              validate="true" cancellable="true">
       <forward name="detail" path="/detailView.do"/> 
       <forward name="tabular" path="/weeklyView.do"/> 
       <forward name="failure" path="/problem.jsp"/>
@@ -298,7 +265,7 @@
                type="hds.view.WeeklyViewAction"
                name="viewScheduleForm"
               scope="session"
-              validate="false">
+              validate="false" cancellable="true">
       <forward name="success" path="/view/detailView.jsp"/> 
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -307,7 +274,7 @@
                type="hds.view.WeeklyViewAction"
                name="viewScheduleForm"
               scope="session"
-              validate="false">
+              validate="false" cancellable="true">
       <forward name="success" path="/view/weeklyView.jsp"/> 
       <forward name="failure" path="/problem.jsp"/>
     </action>
@@ -353,5 +320,6 @@
       -->
 
   </action-mappings>
+  <message-resources parameter="ApplicationResources" null="false"/>
 
 </struts-config>

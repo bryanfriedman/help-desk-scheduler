@@ -1,16 +1,16 @@
-<%@ taglib uri='/WEB-INF/struts-template.tld' prefix='template' %>
+<%@ taglib uri='http://struts.apache.org/tags-tiles' prefix='tiles' %>
 
-<template:insert template='/mainTemplate.jsp'>
-  <template:put name='body' content='<body onLoad="uf()">' direct='true'/>
-  <template:put name='script' content='/accounts/accountsScript.jsp'/>
-  <template:put name='login' content='/userinfo.jsp'/>
+<tiles:insert page='/mainTemplate.jsp'>
+  <tiles:put name='body' value='<body onLoad="uf()">' direct='true'/>
+  <tiles:put name='script' value='/accounts/accountsScript.jsp'/>
+  <tiles:put name='login' value='/userinfo.jsp'/>
 <% if (request.isUserInRole("A")) { %>
-   <template:put name='menu' content='/admin/menu.jsp'/>
+   <tiles:put name='menu' value='/admin/menu.jsp'/>
 <% } else if (request.isUserInRole("S")) { %>
-   <template:put name='menu' content='/student/menu.jsp'/>
+   <tiles:put name='menu' value='/student/menu.jsp'/>
 <% } else if (request.isUserInRole("L")) { %>
-   <template:put name='menu' content='/student/menu.jsp'/>
+   <tiles:put name='menu' value='/student/menu.jsp'/>
 <% } %>
-  <template:put name='header' content='/header.html'/>
-  <template:put name='content' content='/accounts/editAccountContent.jsp'/>
-</template:insert>
+  <tiles:put name='header' value='/header.html'/>
+  <tiles:put name='content' value='/accounts/editAccountContent.jsp'/>
+</tiles:insert>

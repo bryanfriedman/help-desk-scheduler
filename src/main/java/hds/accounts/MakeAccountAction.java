@@ -3,22 +3,25 @@ package hds.accounts;
 import java.sql.*;
 import java.io.*;
 import java.util.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.text.*;
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import org.apache.struts.action.*;
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
+import jakarta.activation.*;
 import hds.HDSDate;
 
 public final class MakeAccountAction extends Action {
 
-  public ActionForward perform(ActionMapping mapping,
+  public ActionForward execute(ActionMapping mapping,
       ActionForm form,
       HttpServletRequest request,
-      HttpServletResponse response) {
+      HttpServletResponse response) throws Exception {
 
-   javax.sql.DataSource dataSource;
+   DataSource dataSource;
    java.sql.Connection myConnection = null;
 	HttpSession session = request.getSession();
    AccountsForm f = (AccountsForm) form;
@@ -33,14 +36,14 @@ public final class MakeAccountAction extends Action {
 
    ActionErrors errors = new ActionErrors();
 	// Report any errors we have discovered back to the original form
-	if (!errors.empty()) {
+	if (!errors.isEmpty()) {
       saveErrors(request, errors);
       saveToken(request);
 	   return (new ActionForward(mapping.getInput()));
 	}      
 
    try {
-      dataSource = servlet.findDataSource(null);
+      dataSource = (DataSource) ((Context) new InitialContext().lookup("java:comp/env")).lookup("jdbc/hds");
       myConnection = dataSource.getConnection();
 
       Statement stmt = myConnection.createStatement();
@@ -64,14 +67,14 @@ public final class MakeAccountAction extends Action {
          }
          if (userList.contains(f.getUsername())) {
             errors.add("username", 
-               new ActionError("error.username.duplicate"));
+               new ActionMessage("error.username.duplicate"));
             saveErrors(request, errors);
             saveToken(request);
 	         return (new ActionForward(mapping.getInput()));
          }
          if (emailList.contains(f.getEmail())) {
             errors.add("email", 
-               new ActionError("error.email.duplicate"));
+               new ActionMessage("error.email.duplicate"));
             saveErrors(request, errors);
             saveToken(request);
 	         return (new ActionForward(mapping.getInput()));
@@ -219,7 +222,7 @@ public final class MakeAccountAction extends Action {
          stmt.executeUpdate(sql);
 
       }
-   } catch (SQLException sqle) {
+   } catch (Exception sqle) {
       request.setAttribute("exception", sqle.getMessage());
       return (mapping.findForward("failure"));
    } finally {
@@ -227,7 +230,7 @@ public final class MakeAccountAction extends Action {
       //sure the connection is closed
       try {
          myConnection.close();
-      } catch (SQLException e) {
+      } catch (Exception e) {
          request.setAttribute("exception", e.getMessage());
          return (mapping.findForward("failure"));
       }
@@ -301,11 +304,11 @@ public final class MakeAccountAction extends Action {
 	Properties props = new Properties();
 	props.put("mail.smtp.host", host);
 	props.put("mail.smtp.port", port);
-	javax.mail.Session mailSession = Session.getDefaultInstance(props, null);
+	jakarta.mail.Session mailSession = Session.getDefaultInstance(props, null);
 	
 	try {
 	    // create a message
-	    javax.mail.Message msg = new MimeMessage(mailSession);
+	    jakarta.mail.Message msg = new MimeMessage(mailSession);
 	    msg.setFrom(new InternetAddress(from));
 	    InternetAddress[] address = {new InternetAddress(to), new InternetAddress(admin)};
 	    msg.setRecipients(Message.RecipientType.TO, address);

@@ -1,6 +1,6 @@
 package hds;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import java.lang.*;
 import org.apache.struts.action.*;
 
@@ -73,7 +73,7 @@ public final class ScheduleForm extends ActionForm {
    // Check name required
    if ((name == null) || (name.length() < 1))
          errors.add("name",
-                 new ActionError("error.schedulename.required"));
+                 new ActionMessage("error.schedulename.required"));
 
    
    HDSDate start = null;
@@ -81,24 +81,24 @@ public final class ScheduleForm extends ActionForm {
    // Check start date required
    if ((startDate == null) || (startDate.length() < 1))
       errors.add("startDate",
-                 new ActionError("error.startDate.required"));
+                 new ActionMessage("error.startDate.required"));
    else {
       start = new HDSDate(startDate);
       // Check start date format
       if (!(start.isValidDate()))
          errors.add("startDate",
-                     new ActionError("error.startDate.format",
+                     new ActionMessage("error.startDate.format",
                                      startDate));
       // Check start = monday
       else if (!(start.isMonday()))
          errors.add("startDate",
-                     new ActionError("error.startDate.monday",
+                     new ActionMessage("error.startDate.monday",
                                      startDate));
 
       // Check start > today
       else if (!(start.isAfter(today)))
          errors.add("startDate",
-                     new ActionError("error.startDate.afterToday",
+                     new ActionMessage("error.startDate.afterToday",
                                      startDate));
    }
 
@@ -106,18 +106,18 @@ public final class ScheduleForm extends ActionForm {
    // Check end date required
    if ((endDate == null) || (endDate.length() < 1))
       errors.add("endDate",
-                 new ActionError("error.endDate.required"));
+                 new ActionMessage("error.endDate.required"));
    else {
       end = new HDSDate(endDate);
       // Check end date format
       if (!(end.isValidDate()))
          errors.add("endDate",
-                     new ActionError("error.endDate.format",
+                     new ActionMessage("error.endDate.format",
                                      endDate));
       // Check end = friday
       else if (!(end.isFriday()))
          errors.add("startDate",
-                     new ActionError("error.endDate.friday",
+                     new ActionMessage("error.endDate.friday",
                                      endDate));
    }
 
@@ -126,7 +126,7 @@ public final class ScheduleForm extends ActionForm {
       // Check start < end
       if (!(end.isAfter(start)))
          errors.add("endDate",
-                     new ActionError("error.endDate.afterStart",
+                     new ActionMessage("error.endDate.afterStart",
                                      endDate));
 
       HDSDate holiday = null;
@@ -136,12 +136,12 @@ public final class ScheduleForm extends ActionForm {
             // Check holiday date format
             if (!(holiday.isValidDate()))
                errors.add("holidays",
-                           new ActionError("error.holiday.format",
+                           new ActionMessage("error.holiday.format",
                                            holidays[i]));
             // Check holiday between start and end
             else if (!(holiday.isBetween(start, end)))
                errors.add("holidays",
-                           new ActionError("error.holiday.between",
+                           new ActionMessage("error.holiday.between",
                                           holidays[i]));
          }
       }
