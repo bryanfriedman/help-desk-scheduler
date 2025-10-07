@@ -44,18 +44,40 @@ And to shut everything down and clean it up:
 Now that I have a baseline of mostly working code, maybe I can write some OpenRewrite recipes to modernize it somehow. Some ideas:
 
 - Switch from MySQL to PostgreSQL
-- Upgrade to Java 21
-- Upgrade to use a newer version of Tomcat
-- Migrate from Struts 1.0 to 2.x?
-- Move certain hardcoded attributes/parameters into properties files?
-- Swap out JSPs for JSFs?
-- Switch from Tomcat JDBCRealm for authentication to something more modern (Jakarta Authentication? Spring Security?)
+- [x] Upgrade to Java 21
+- [x] Upgrade to use a newer version of Tomcat
+- [x] Migrate from Struts 1.0 to 1.5
+- [ ] Migrate from Struts 1.0 to 2.x?
+- [ ] Move certain hardcoded attributes/parameters into properties files?
+- [ ] Swap out JSPs for JSFs?
+- [ ] Switch from Tomcat JDBCRealm for authentication to something more modern (Jakarta Authentication? Spring Security?)
 
 These next improvements are probably beyond the scope of OpenRewrite, but might be fun to do anyway:
 
-- Add some UI design using CSS and Bootstrap (or some other alternative)
-- Use an actual build tool like Maven or Gradle (or maybe even Ant to start)
-- Refactor completely to use a more modern framework like Spring (Spring MVC? Spring Boot?)
-- Rearchitect any half-baked use cases or workflows
+- [ ] Add some UI design using CSS and Bootstrap (or some other alternative)
+- [x] Use an actual build tool like Maven or **Gradle**
+- [ ] Refactor completely to use a more modern framework like Spring (Spring MVC? Spring Boot?)
+- [ ] Rearchitect any half-baked use cases or workflows
+- [ ] Bug fixes
 
+## Updates
 
+The initial work to get things up and running kept things mostly simple, as described above. The `tomcat` folder structure was mostly maintained, `.class` files were compiled and everything was copied over directly.
+
+As a followup, I reconfigured things to use Gradle for the build instead of manual compiling and copying of class files. I did this primarily so I could run OpenRewrite recipes using the build plugin (and to learn about Gradle since I have mostly used Maven until now). Of course, this meant restructuring some directories and creating some new configuration files. I added an additional build step to the Docker Compose and improved those dependencies as well.
+
+After that, I worked on adding [OpenRewrite recipes](recipes) to upgrade to Java 21 and move to Tomcat 10+. I started by using existing OpenRewrite recipes ([`UpgradeToJava21`](https://docs.openrewrite.org/recipes/java/migrate/upgradetojava21) and [`JakartaEE11`](https://docs.openrewrite.org/recipes/java/migrate/jakarta/jakartaee11)) but soon discovered that there was no way to run Struts 1 as I had it with a Java version that new. So I discovered the [Struts Reloaded](https://github.com/weblegacy/struts1) project, and switched to using that in order to keep Struts 1.x for now, but upgrade the environment around it. 
+
+Aside from those two recipes, I needed a few more to get things completely working. I was able to mostly use existing OpenRewrite recipes including [`AddDependency`](https://docs.openrewrite.org/recipes/java/dependencies/adddependency), [`ChangeDependency`](https://docs.openrewrite.org/recipes/java/dependencies/changedependency), or [`RemoveDependency`](https://docs.openrewrite.org/recipes/java/dependencies/removedependency), [`ChangeType`](https://docs.openrewrite.org/recipes/java/changetype), and [`ChangeMethodName`](https://docs.openrewrite.org/recipes/java/changemethodname). 
+
+There were also some necessary changes for the JSP files, primarily to move from Struts Templates to Struts Tiles. However, since there is no OpenRewrite parser for JSP, I used the [`FindAndReplace`](https://docs.openrewrite.org/recipes/text/findandreplace) recipe to do some regex replacement. I even used some XML and file creation/deletion recipes to modify the Tomcat and Struts configuration files.
+
+I did need to write two custom recipes as well. One was to change the way data sources are accessed from using the Struts wrapper method to standard JNDI references instead. The other was to add `throws Exception` to one of the new Struts 1.5 override methods that was renamed. I wrote these (with some help from Claude Code) and included them in the recipe list.
+
+This is hardly code modernization. It's still using an antiquated framework in Struts 1.x, but at least it works on a more modern and supported runtime and application server along with a modern build tool. 
+
+### Running the OpenRewrite Recipes
+
+I've run the recipes and checked in the changes to the [`upgrade-recipe`](/tree/upgrade-recipe) branch. To run the recipes yourself and see the changes, use the OpenRewrite Gradle plugin:
+
+`./gradlew rewriteRun`
